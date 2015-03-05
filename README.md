@@ -10,6 +10,7 @@ To run our project, you should go to http://url/Handler after deploying to Amazo
 We implemented k-resilient in the project, you should modify k in data.Data.java.
 
 2) Overall Structure
+ 
 a) Design
 • The session ID is generated from a session number appended to the local server's IP address.
 This format guarantees that it will be unique even across multiple servers.
@@ -17,6 +18,7 @@ This format guarantees that it will be unique even across multiple servers.
 • Sessions are stored in a ConcurrentHashMap structure, keyed on session ID.
 • Sessions are timed out after 10 minutes of inactivity.
 • A cleanup daemon removes expired entries from the session table with a fixed time.
+
 b) Cookie format
 Cookie contains three parts:
 <sessionID, versionNumber, locationMetadata>
@@ -24,6 +26,7 @@ where locationMetadata = SvrIP_1, SvrIP_2, ... SvrIP_(K+1) in k-resilient system
 to separate the three parts.
 e.g. session cookie:
 2*54.187.102.227#3#54.187.102.227_54.187.83.210_54.187.102.183_54.187.66.5
+
 c) RPC message
 The format of call message is callID_OPERATIONCODE_sessionID_version. If there is no need for sessionID, version, 
 it will use zero instead like this, callID_OPERATIONCODE_0_0.
@@ -33,6 +36,7 @@ For sessionWrite() and check(), reply message is callID.
 For getView(), reply message is callID_View.
 
 3) Source File
+
 a) sessionManagement
 The package contains three classes: Handler, Session and Cleaner.
 • Handler
@@ -46,6 +50,7 @@ Session Class contains a static HashMap type “sessionPool” that stores the <
 • Cleaner
 Cleaner is a separate thread that cleans expired sessions periodically. It will iterate the sessionPool and remove 
 expired session every run_period.
+
 b) rpc
 RPCClient contains check(), sessionRead(), sessionWrite(), getView() , marshal() and unmarshal() functions. check(), 
 sessionRead(), sessionWrite() and getView() have same communication mechanism using UDP.
@@ -55,8 +60,10 @@ If the response has the appropriate callID, it processes the response.
 RPCServer uses a well-known port 5300.It starts an independent thread to listen to the request from clients 
 and when it receives a request, it extracts the OPERATIONCODE and processes the request accordingly. 
 Finally, it returns a response to the RPC client.
+
 c) data
 Address object has an IP address and a port number of a Server. Data object contains the address and view of a Server.
+
 d) groupMembership
 Keep track of all servers in the group to implement gossip protocol.
 • View
@@ -76,6 +83,7 @@ If a successful reply return t.View, the current view of t, this server unions i
 4) Elastic Beanstalk setup procedure
 As a .war file, the project can be deployed to a web server or platform such as Amazon's Elastic Beanstalk. Simply update the provided CS5300.war file onto the service and run it. Doing so will deploy the application to http://url/Handler.
 Our Elastic Beanstalk setup procedure:
+
 a) Create a new environment
 b) Setting the container type and uploading .war file
 c) After the Environment is created, go into 'Configuration'. Set the minimum number of instances to 4 for 3-resilient.
