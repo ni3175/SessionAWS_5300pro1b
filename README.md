@@ -84,5 +84,4 @@ For K-resilience, in the session read, there are two conditions.
 On one hand, if session is stored locally, it will directly read it. One the other hand, if session is stored remotely, 
 we send RPC requests concurrently to IP in the cookies, which are valid at the moment and wait for the first successful 
 response and discard other response (if any). This approach minimizes latency but generates some unnecessary network traffic.
-In the session write, we send concurrently multiple session write requests to servers and wait until it has K successful responses 
-or all requests have been processed accordingly.
+In the session write, we send concurrently multiple session write requests to servers and wait until it has K successful responses or all requests have been processed accordingly.
