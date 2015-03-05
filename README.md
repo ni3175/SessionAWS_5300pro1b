@@ -9,7 +9,7 @@ Java code implementing a distributed, fault-tolerant, in-memory session state da
 To run our project, you should go to http://url/Handler after deploying to Amazon Elastic Beanstalk. 
 We implemented k-resilient in the project, you should modify k in data.Data.java.
 
-2. Overall Structure
+2) Overall Structure
 a) Design
 • The session ID is generated from a session number appended to the local server's IP address.
 This format guarantees that it will be unique even across multiple servers.
