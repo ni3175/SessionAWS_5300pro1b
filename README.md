@@ -31,7 +31,8 @@ The format of reply message is callID_Informationadded.
 For sessionRead(), the reply message is callID_versionNum_message_expireTime_primaryAddress_localAddress.
 For sessionWrite() and check(), reply message is callID.
 For getView(), reply message is callID_View.
-3. Source File
+
+3) Source File
 a) sessionManagement
 The package contains three classes: Handler, Session and Cleaner.
 • Handler
@@ -71,16 +72,17 @@ read the View of another server from its own View and also contact with the boot
 To avoid convoys, each server will choose a sleep time uniformly at random between gossip_secs/2 and gossip_secs*3/2.
 First each server will randomly choose a server t from its own view. Then the server sends a RPC request to it. 
 If a successful reply return t.View, the current view of t, this server unions its own View with t.View. If this server fails to receive a PRC reply, it deletes server t from its own View. Second each server will read and update bootstrap view. In this way, the Bootstrap View will eventually converge to a subset of the active servers.
-4. Elastic Beanstalk setup procedure
+
+4) Elastic Beanstalk setup procedure
 As a .war file, the project can be deployed to a web server or platform such as Amazon's Elastic Beanstalk. Simply update the provided CS5300.war file onto the service and run it. Doing so will deploy the application to http://url/Handler.
 Our Elastic Beanstalk setup procedure:
-1) Create a new environment
-2) Setting the container type and uploading .war file
-3) After the Environment is created, go into 'Configuration'. Set the minimum number of instances to 4 for 3-resilient.
-4) Modify the Security Group (in the EC2 console) to have all inbound UDP and HTTP connections on ports 0-65535 accessible from everywhere.
-5) Test the Beanstalk instance of our code.
-5. Implement Extra credit
-For K-resilience, in the session read, there are two conditions.
+a) Create a new environment
+b) Setting the container type and uploading .war file
+c) After the Environment is created, go into 'Configuration'. Set the minimum number of instances to 4 for 3-resilient.
+d) Modify the Security Group (in the EC2 console) to have all inbound UDP and HTTP connections on ports 0-65535 accessible from everywhere.
+e) Test the Beanstalk instance of our code.
+
+5) Implement K-resilience, in the session read, there are two conditions.
 On one hand, if session is stored locally, it will directly read it. One the other hand, if session is stored remotely, 
 we send RPC requests concurrently to IP in the cookies, which are valid at the moment and wait for the first successful 
 response and discard other response (if any). This approach minimizes latency but generates some unnecessary network traffic.
